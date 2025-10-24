@@ -1,0 +1,480 @@
+---
+title: "Basic Usage Examples"
+description: "Complete code examples for common YouTube Transcript API use cases"
+---
+
+## Simple transcript extraction
+
+Get a transcript in different formats:
+
+<CodeGroup>
+```bash cURL
+# JSON format (default)
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ"
+
+# Plain text format
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ?format=text"
+
+# SRT subtitle format
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ?format=srt"
+```
+
+```python Python
+import requests
+
+# Get JSON transcript
+response = requests.get(
+    'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ'
+)
+transcript = response.json()
+
+print(f"Video ID: {transcript['video_id']}")
+print(f"Language: {transcript['language']}")
+print(f"Total segments: {len(transcript['transcript'])}")
+
+# Get plain text format
+response = requests.get(
+    'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ?format=text'
+)
+text_transcript = response.text
+print(text_transcript)
+```
+
+```javascript JavaScript
+// Get JSON transcript
+const response = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ'
+);
+const transcript = await response.json();
+
+console.log(`Video ID: ${transcript.video_id}`);
+console.log(`Language: ${transcript.language}`);
+console.log(`Total segments: ${transcript.transcript.length}`);
+
+// Get plain text format
+const textResponse = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ?format=text'
+);
+const textTranscript = await textResponse.text();
+console.log(textTranscript);
+```
+</CodeGroup>
+
+## AI-powered analysis
+
+Get intelligent summaries and insights:
+
+<CodeGroup>
+```bash cURL
+# Basic summary
+curl -X POST "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/summarize" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+
+# Extract wisdom using Fabric pattern
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/pattern/extract_wisdom"
+
+# Apply custom pattern
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/pattern/create_summary"
+```
+
+```python Python
+import requests
+
+# Get AI summary
+response = requests.post(
+    'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/summarize',
+    json={}
+)
+summary = response.json()
+
+print(f"Model used: {summary['model']}")
+print(f"Summary: {summary['summary']}")
+print(f"Token usage: {summary['usage']}")
+
+# Extract wisdom
+response = requests.get(
+    'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/pattern/extract_wisdom'
+)
+wisdom = response.json()
+print(f"Wisdom extracted: {wisdom['result']}")
+```
+
+```javascript JavaScript
+// Get AI summary
+const summaryResponse = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/summarize',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({})
+  }
+);
+const summary = await summaryResponse.json();
+
+console.log(`Model used: ${summary.model}`);
+console.log(`Summary: ${summary.summary}`);
+
+// Extract wisdom
+const wisdomResponse = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/pattern/extract_wisdom'
+);
+const wisdom = await wisdomResponse.json();
+console.log(`Wisdom: ${wisdom.result}`);
+```
+</CodeGroup>
+
+## Interactive chat
+
+Have conversations about video content:
+
+<CodeGroup>
+```bash cURL
+# Ask a question
+curl -X POST "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/chat" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "What are the main topics discussed in this video?"
+  }'
+
+# Follow-up with conversation history
+curl -X POST "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/chat" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Can you elaborate on the first point?",
+    "conversation_history": [
+      {"role": "user", "content": "What are the main topics?"},
+      {"role": "assistant", "content": "The main topics are..."}
+    ]
+  }'
+```
+
+```python Python
+import requests
+
+# Start a conversation
+response = requests.post(
+    'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/chat',
+    json={
+        "message": "What are the main topics discussed in this video?"
+    }
+)
+chat = response.json()
+
+print(f"User: {chat['user_message']}")
+print(f"Assistant: {chat['assistant_response']}")
+
+# Continue conversation with history
+conversation_history = [
+    {"role": "user", "content": chat['user_message']},
+    {"role": "assistant", "content": chat['assistant_response']}
+]
+
+response = requests.post(
+    'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/chat',
+    json={
+        "message": "Can you provide specific timestamps?",
+        "conversation_history": conversation_history
+    }
+)
+follow_up = response.json()
+print(f"Follow-up: {follow_up['assistant_response']}")
+```
+
+```javascript JavaScript
+// Start a conversation
+const chatResponse = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/chat',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: "What are the main topics discussed in this video?"
+    })
+  }
+);
+const chat = await chatResponse.json();
+
+console.log(`User: ${chat.user_message}`);
+console.log(`Assistant: ${chat.assistant_response}`);
+
+// Continue conversation
+const conversationHistory = [
+  { role: "user", content: chat.user_message },
+  { role: "assistant", content: chat.assistant_response }
+];
+
+const followUpResponse = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/chat',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: "Can you provide specific timestamps?",
+      conversation_history: conversationHistory
+    })
+  }
+);
+const followUp = await followUpResponse.json();
+console.log(`Follow-up: ${followUp.assistant_response}`);
+```
+</CodeGroup>
+
+## YouTube video search
+
+Find videos and get their metadata:
+
+<CodeGroup>
+```bash cURL
+# Search for videos
+curl "https://fastapi-youtube-transcript.up.railway.app/search?q=python+tutorial&max_results=5"
+
+# Search with specific parameters
+curl "https://fastapi-youtube-transcript.up.railway.app/search?q=machine+learning&max_results=10"
+```
+
+```python Python
+import requests
+
+# Search for videos
+response = requests.get(
+    'https://fastapi-youtube-transcript.up.railway.app/search',
+    params={
+        'q': 'python tutorial',
+        'max_results': 5
+    }
+)
+search_results = response.json()
+
+print(f"Found {search_results['resultCount']} videos")
+for video in search_results['results']:
+    print(f"- {video['title']} ({video['videoId']})")
+    print(f"  Channel: {video['channelTitle']}")
+    print(f"  Published: {video['publishedAt']}")
+```
+
+```javascript JavaScript
+// Search for videos
+const searchResponse = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/search?q=python+tutorial&max_results=5'
+);
+const searchResults = await searchResponse.json();
+
+console.log(`Found ${searchResults.resultCount} videos`);
+searchResults.results.forEach(video => {
+  console.log(`- ${video.title} (${video.videoId})`);
+  console.log(`  Channel: ${video.channelTitle}`);
+  console.log(`  Published: ${video.publishedAt}`);
+});
+```
+</CodeGroup>
+
+## Error handling
+
+Handle common errors gracefully:
+
+<CodeGroup>
+```python Python
+import requests
+from requests.exceptions import RequestException
+
+def get_transcript_safely(video_id):
+    try:
+        response = requests.get(
+            f'https://fastapi-youtube-transcript.up.railway.app/transcript/{video_id}',
+            timeout=30
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    except requests.exceptions.HTTPError as e:
+        if response.status_code == 404:
+            print(f"Transcript not available for video {video_id}")
+        elif response.status_code == 422:
+            print(f"Invalid video ID: {video_id}")
+        else:
+            print(f"HTTP error: {e}")
+        return None
+    
+    except RequestException as e:
+        print(f"Request failed: {e}")
+        return None
+
+# Usage
+transcript = get_transcript_safely("dQw4w9WgXcQ")
+if transcript:
+    print(f"Got transcript with {len(transcript['transcript'])} segments")
+```
+
+```javascript JavaScript
+async function getTranscriptSafely(videoId) {
+  try {
+    const response = await fetch(
+      `https://fastapi-youtube-transcript.up.railway.app/transcript/${videoId}`
+    );
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.log(`Transcript not available for video ${videoId}`);
+      } else if (response.status === 422) {
+        console.log(`Invalid video ID: ${videoId}`);
+      } else {
+        console.log(`HTTP error: ${response.status}`);
+      }
+      return null;
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.log(`Request failed: ${error.message}`);
+    return null;
+  }
+}
+
+// Usage
+const transcript = await getTranscriptSafely("dQw4w9WgXcQ");
+if (transcript) {
+  console.log(`Got transcript with ${transcript.transcript.length} segments`);
+}
+```
+</CodeGroup>
+
+## Batch processing
+
+Process multiple videos efficiently:
+
+<CodeGroup>
+```python Python
+import requests
+import asyncio
+import aiohttp
+from typing import List, Dict
+
+async def process_video_batch(video_ids: List[str]) -> Dict[str, dict]:
+    """Process multiple videos concurrently"""
+    results = {}
+    
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for video_id in video_ids:
+            task = process_single_video(session, video_id)
+            tasks.append(task)
+        
+        responses = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        for video_id, response in zip(video_ids, responses):
+            if isinstance(response, Exception):
+                results[video_id] = {"error": str(response)}
+            else:
+                results[video_id] = response
+    
+    return results
+
+async def process_single_video(session: aiohttp.ClientSession, video_id: str) -> dict:
+    """Process a single video with transcript and summary"""
+    base_url = "https://fastapi-youtube-transcript.up.railway.app"
+    
+    # Get transcript
+    async with session.get(f"{base_url}/transcript/{video_id}") as response:
+        if response.status != 200:
+            raise Exception(f"Failed to get transcript: {response.status}")
+        transcript = await response.json()
+    
+    # Get summary
+    async with session.post(
+        f"{base_url}/transcript/{video_id}/summarize",
+        json={}
+    ) as response:
+        if response.status != 200:
+            raise Exception(f"Failed to get summary: {response.status}")
+        summary = await response.json()
+    
+    return {
+        "transcript": transcript,
+        "summary": summary
+    }
+
+# Usage
+video_ids = ["dQw4w9WgXcQ", "jNQXAC9IVRw", "9bZkp7q19f0"]
+results = asyncio.run(process_video_batch(video_ids))
+
+for video_id, result in results.items():
+    if "error" in result:
+        print(f"Error processing {video_id}: {result['error']}")
+    else:
+        print(f"Successfully processed {video_id}")
+```
+</CodeGroup>
+
+## Integration patterns
+
+Common integration patterns for different use cases:
+
+### Content analysis pipeline
+
+```python
+import requests
+from typing import Dict, List
+
+class YouTubeAnalyzer:
+    def __init__(self):
+        self.base_url = "https://fastapi-youtube-transcript.up.railway.app"
+    
+    def analyze_video(self, video_id: str) -> Dict:
+        """Complete video analysis pipeline"""
+        # Get transcript
+        transcript = self._get_transcript(video_id)
+        if not transcript:
+            return {"error": "Could not get transcript"}
+        
+        # Get AI analysis
+        summary = self._get_summary(video_id)
+        wisdom = self._get_wisdom(video_id)
+        
+        return {
+            "video_id": video_id,
+            "transcript": transcript,
+            "summary": summary,
+            "wisdom": wisdom,
+            "analysis_complete": True
+        }
+    
+    def _get_transcript(self, video_id: str) -> Dict:
+        response = requests.get(f"{self.base_url}/transcript/{video_id}")
+        return response.json() if response.status_code == 200 else None
+    
+    def _get_summary(self, video_id: str) -> Dict:
+        response = requests.post(
+            f"{self.base_url}/transcript/{video_id}/summarize",
+            json={}
+        )
+        return response.json() if response.status_code == 200 else None
+    
+    def _get_wisdom(self, video_id: str) -> Dict:
+        response = requests.get(
+            f"{self.base_url}/transcript/{video_id}/pattern/extract_wisdom"
+        )
+        return response.json() if response.status_code == 200 else None
+
+# Usage
+analyzer = YouTubeAnalyzer()
+result = analyzer.analyze_video("dQw4w9WgXcQ")
+print(f"Analysis complete: {result['analysis_complete']}")
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="AI Analysis Examples" icon="brain" href="/examples/ai-analysis">
+    Advanced AI analysis patterns and use cases
+  </Card>
+  <Card title="Integration Guide" icon="puzzle-piece" href="/examples/integration">
+    Build applications with the YouTube Transcript API
+  </Card>
+  <Card title="API Reference" icon="code" href="/api/overview">
+    Complete endpoint documentation
+  </Card>
+  <Card title="Fabric Patterns" icon="wand-magic-sparkles" href="/features/fabric-patterns">
+    Explore 226+ AI analysis patterns
+  </Card>
+</CardGroup>

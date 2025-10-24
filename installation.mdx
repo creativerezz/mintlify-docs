@@ -1,0 +1,208 @@
+---
+title: "Installation"
+description: "Set up the YouTube Transcript API locally or deploy to the cloud"
+---
+
+## Using the hosted API
+
+The easiest way to get started is using our hosted API - no installation required!
+
+**Base URL:** `https://fastapi-youtube-transcript.up.railway.app`
+
+<Card title="Interactive API Docs" icon="play" href="https://fastapi-youtube-transcript.up.railway.app/docs">
+  Try the API directly in your browser with Swagger UI
+</Card>
+
+## Local development
+
+Run the API locally for development or customization.
+
+### Prerequisites
+
+- Python 3.11 or higher
+- pip package manager
+
+### Setup steps
+
+<Steps>
+<Step title="Clone the repository">
+```bash
+git clone https://github.com/creativerezz/youtube-transcript-proxie-v1.git
+cd youtube-transcript-proxie-v1
+```
+</Step>
+
+<Step title="Install dependencies">
+```bash
+pip install -r requirements.txt
+```
+
+The main dependencies are:
+- `fastapi` - Web framework
+- `hypercorn` - ASGI server
+- `youtube-transcript-api` - Transcript extraction
+- `requests` - HTTP client
+- `python-dotenv` - Environment variables
+</Step>
+
+<Step title="Set up environment variables">
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your API keys (optional for local development):
+```bash
+# Optional: For AI features
+OPENROUTER_API_KEY=your_openrouter_api_key
+
+# Optional: For YouTube search
+YOUTUBE_API_KEY=your_youtube_api_key
+
+# Only needed for cloud deployment
+WEBSHARE_PROXY_USERNAME=your_username
+WEBSHARE_PROXY_PASSWORD=your_password
+```
+
+<Note>
+Local development works without any API keys. You'll only need them for AI analysis and YouTube search features.
+</Note>
+</Step>
+
+<Step title="Run the server">
+```bash
+hypercorn main:app --reload
+```
+
+The API will be available at `http://127.0.0.1:8000`
+
+<Check>
+Visit `http://127.0.0.1:8000/docs` to see the interactive API documentation.
+</Check>
+</Step>
+</Steps>
+
+## Cloud deployment
+
+Deploy your own instance to Railway, Heroku, or any cloud platform.
+
+### Railway (Recommended)
+
+<Card title="Deploy to Railway" icon="rocket" href="https://railway.app/template/-NvLj4?referralCode=CRJ8FE">
+  One-click deployment with pre-configured environment
+</Card>
+
+**Required environment variables for cloud deployment:**
+- `OPENROUTER_API_KEY` - For AI analysis features
+- `WEBSHARE_PROXY_USERNAME` - Proxy for transcript access
+- `WEBSHARE_PROXY_PASSWORD` - Proxy credentials
+- `YOUTUBE_API_KEY` - For search functionality (optional)
+
+<Warning>
+YouTube blocks cloud provider IPs, so you'll need Webshare residential proxies for cloud deployment.
+</Warning>
+
+### Other platforms
+
+The API works on any platform that supports Python and ASGI:
+
+<Tabs>
+<Tab title="Heroku">
+```bash
+# Create Procfile
+echo "web: hypercorn main:app --bind [::]:$PORT" > Procfile
+
+# Deploy
+git add .
+git commit -m "Deploy to Heroku"
+git push heroku main
+```
+</Tab>
+
+<Tab title="Docker">
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+EXPOSE 8000
+
+CMD ["hypercorn", "main:app", "--bind", "[::]:8000"]
+```
+</Tab>
+
+<Tab title="Vercel">
+```json
+{
+  "builds": [
+    {
+      "src": "main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "main.py"
+    }
+  ]
+}
+```
+</Tab>
+</Tabs>
+
+## API keys setup
+
+### OpenRouter (for AI features)
+
+1. Sign up at [OpenRouter](https://openrouter.ai)
+2. Get your API key from the [keys page](https://openrouter.ai/keys)
+3. Add to your environment: `OPENROUTER_API_KEY=your_key_here`
+
+<Tip>
+OpenRouter provides access to 8+ free AI models including Llama, Gemini, and DeepSeek.
+</Tip>
+
+### YouTube Data API (for search)
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create a new project or select existing
+3. Enable YouTube Data API v3
+4. Create credentials (API key)
+5. Add to environment: `YOUTUBE_API_KEY=your_key_here`
+
+### Webshare Proxies (for cloud deployment)
+
+1. Sign up at [Webshare](https://www.webshare.io)
+2. Get residential proxy credentials
+3. Add to environment:
+   ```bash
+   WEBSHARE_PROXY_USERNAME=your_username
+   WEBSHARE_PROXY_PASSWORD=your_password
+   ```
+
+## Verification
+
+Test your installation with these commands:
+
+<CodeGroup>
+```bash Health Check
+curl http://127.0.0.1:8000/
+```
+
+```bash Get Transcript
+curl "http://127.0.0.1:8000/transcript/dQw4w9WgXcQ"
+```
+
+```bash AI Summary (requires OpenRouter key)
+curl -X POST "http://127.0.0.1:8000/transcript/dQw4w9WgXcQ/summarize" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+</CodeGroup>
+
+<Check>
+If everything is working, you should see JSON responses with transcript data and AI analysis.
+</Check>

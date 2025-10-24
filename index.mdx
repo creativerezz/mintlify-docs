@@ -1,97 +1,98 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "YouTube Transcript API"
+description: "Extract YouTube transcripts and analyze them with AI-powered insights using 226+ Fabric patterns"
 ---
 
-## Setting up
+## What is YouTube Transcript API?
 
-Get your documentation site up and running in minutes.
+A FastAPI-based service that extracts YouTube video transcripts and provides AI-powered analysis using OpenRouter's free LLMs and 226 Fabric AI patterns by Daniel Miessler.
 
 <Card
-  title="Start here"
+  title="Get started in 5 minutes"
   icon="rocket"
   href="/quickstart"
   horizontal
 >
-  Follow our three step quickstart guide.
+  Start extracting and analyzing YouTube transcripts with AI
 </Card>
 
-## Make it yours
+## Core Features
 
-Design a docs site that looks great and empowers your users.
+Transform any YouTube video into actionable insights with our comprehensive API.
 
-<Columns cols={2}>
+<CardGroup cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="Transcript Extraction"
+    icon="closed-captioning"
+    href="/features/transcript-extraction"
   >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Get transcripts in JSON, text, SRT, or VTT formats with multi-language support
   </Card>
   <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
+    title="AI Analysis"
+    icon="brain"
+    href="/features/ai-analysis"
   >
-    Auto-generate API documentation from OpenAPI specifications.
+    Summarize, extract wisdom, and analyze content with 8+ free AI models
   </Card>
-</Columns>
+  <Card
+    title="Fabric Patterns"
+    icon="wand-magic-sparkles"
+    href="/features/fabric-patterns"
+  >
+    Apply 226+ AI patterns for content analysis, creation, and extraction
+  </Card>
+  <Card
+    title="Chat Interface"
+    icon="comments"
+    href="/features/chat-interface"
+  >
+    Have conversations about video content with full transcript context
+  </Card>
+</CardGroup>
 
-## Create beautiful pages
+## Quick Example
 
-Everything you need to create world-class documentation.
+Get started with a simple transcript extraction:
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+```bash
+# Get transcript in JSON format
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ"
 
-## Need inspiration?
+# Get AI summary
+curl -X POST "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/summarize" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+
+# Chat about the video
+curl -X POST "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/chat" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What are the main topics discussed?"}'
+```
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Content Analysis" icon="magnifying-glass">
+    Analyze video content for research, competitive analysis, and trend identification
+  </Card>
+  <Card title="Educational Tools" icon="graduation-cap">
+    Create study guides, extract key concepts, and generate quiz questions from lectures
+  </Card>
+  <Card title="Accessibility" icon="universal-access">
+    Generate subtitles and transcripts for hearing-impaired users
+  </Card>
+  <Card title="Content Creation" icon="pen-to-square">
+    Repurpose video content into blog posts, social media, and newsletters
+  </Card>
+</CardGroup>
+
+## Ready to start?
 
 <Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
+  title="View API Documentation"
+  icon="code"
+  href="/api/overview"
 >
-  Browse our showcase of exceptional documentation sites.
+  Explore all endpoints with interactive examples and detailed specifications
 </Card>

@@ -1,0 +1,227 @@
+---
+title: "API Overview"
+description: "Complete reference for the YouTube Transcript API endpoints"
+---
+
+## Base URL
+
+```
+Production: https://fastapi-youtube-transcript.up.railway.app
+Local: http://127.0.0.1:8000
+```
+
+<Card title="Interactive API Docs" icon="play" href="https://fastapi-youtube-transcript.up.railway.app/docs">
+  Try all endpoints with live examples in Swagger UI
+</Card>
+
+## Authentication
+
+No authentication required! All endpoints are publicly accessible.
+
+<Note>
+The API uses server-side keys for external services (OpenRouter, YouTube Data API, Webshare proxies).
+</Note>
+
+## Core Endpoints
+
+### Transcript Extraction
+
+<Card title="GET /transcript/{video_id}" icon="closed-captioning" href="/api/transcript">
+  Extract YouTube transcripts in multiple formats (JSON, text, SRT, VTT)
+</Card>
+
+### AI Analysis
+
+<CardGroup cols={2}>
+  <Card title="POST /transcript/{video_id}/summarize" icon="brain" href="/api/summarize">
+    Get AI-powered summaries with key insights and takeaways
+  </Card>
+  <Card title="POST /transcript/{video_id}/chat" icon="comments" href="/api/chat">
+    Have conversations about video content with full context
+  </Card>
+</CardGroup>
+
+### Fabric AI Patterns
+
+<CardGroup cols={2}>
+  <Card title="GET /patterns" icon="list" href="/api/patterns">
+    List all 226 available Fabric AI patterns
+  </Card>
+  <Card title="GET /transcript/{video_id}/pattern/{pattern_name}" icon="wand-magic-sparkles" href="/api/patterns">
+    Apply any Fabric pattern to analyze content
+  </Card>
+</CardGroup>
+
+### Utility Endpoints
+
+<CardGroup cols={2}>
+  <Card title="GET /transcript/{video_id}/list" icon="list-ul" href="/api/transcript">
+    List all available transcripts for a video
+  </Card>
+  <Card title="GET /search" icon="magnifying-glass" href="/api/search">
+    Search YouTube videos and get metadata
+  </Card>
+</CardGroup>
+
+## Response Format
+
+All endpoints return JSON with consistent structure:
+
+```json
+{
+  "video_id": "dQw4w9WgXcQ",
+  "language": "English",
+  "model": "meta-llama/llama-3.3-70b-instruct:free",
+  "result": "...",
+  "usage": {
+    "prompt_tokens": 2847,
+    "completion_tokens": 312,
+    "total_tokens": 3159
+  },
+  "fallback_used": false
+}
+```
+
+## Error Handling
+
+The API uses standard HTTP status codes:
+
+| Code | Description |
+|------|-------------|
+| `200` | Success |
+| `400` | Bad Request (invalid parameters) |
+| `404` | Not Found (video unavailable or transcripts disabled) |
+| `422` | Validation Error (invalid request body) |
+| `500` | Internal Server Error |
+| `503` | Service Unavailable (all AI models rate-limited) |
+| `504` | Gateway Timeout |
+
+Error responses include detailed messages:
+
+```json
+{
+  "detail": "Transcripts are disabled for this video"
+}
+```
+
+## Rate Limits
+
+- **Transcript endpoints**: No rate limits
+- **AI endpoints**: Subject to OpenRouter model limits
+- **Search endpoint**: Subject to YouTube Data API quotas
+
+<Tip>
+The API automatically falls back to alternative AI models when rate limits are hit.
+</Tip>
+
+## Available AI Models
+
+The API supports 8+ free models with automatic fallback:
+
+| Model | Context | Best For |
+|-------|---------|----------|
+| `meta-llama/llama-3.3-70b-instruct:free` | 128K | General analysis (default) |
+| `google/gemini-2.0-flash-exp:free` | 1M | Long videos |
+| `deepseek/deepseek-chat-v3.1:free` | 163K | Technical content |
+| `qwen/qwen3-coder:free` | 262K | Code-related videos |
+
+## Quick Examples
+
+### Basic transcript extraction
+
+```bash
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ"
+```
+
+### AI summary with custom model
+
+```bash
+curl -X POST "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/summarize?model=google/gemini-2.0-flash-exp:free" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+### Apply Fabric pattern
+
+```bash
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/dQw4w9WgXcQ/pattern/extract_wisdom"
+```
+
+### Search videos
+
+```bash
+curl "https://fastapi-youtube-transcript.up.railway.app/search?q=python+tutorial&max_results=5"
+```
+
+## SDKs and Integrations
+
+While we don't provide official SDKs, the API works with any HTTP client:
+
+<Tabs>
+<Tab title="Python">
+```python
+import requests
+
+# Simple transcript extraction
+response = requests.get(
+    'https://fastapi-youtube-transcript.up.railway.app/transcript/VIDEO_ID'
+)
+transcript = response.json()
+
+# AI analysis
+response = requests.post(
+    'https://fastapi-youtube-transcript.up.railway.app/transcript/VIDEO_ID/summarize',
+    json={}
+)
+summary = response.json()
+```
+</Tab>
+
+<Tab title="JavaScript">
+```javascript
+// Simple transcript extraction
+const transcript = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/transcript/VIDEO_ID'
+).then(r => r.json());
+
+// AI analysis
+const summary = await fetch(
+  'https://fastapi-youtube-transcript.up.railway.app/transcript/VIDEO_ID/summarize',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({})
+  }
+).then(r => r.json());
+```
+</Tab>
+
+<Tab title="cURL">
+```bash
+# Transcript extraction
+curl "https://fastapi-youtube-transcript.up.railway.app/transcript/VIDEO_ID"
+
+# AI analysis
+curl -X POST "https://fastapi-youtube-transcript.up.railway.app/transcript/VIDEO_ID/summarize" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+</Tab>
+</Tabs>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Try the API" icon="play" href="https://fastapi-youtube-transcript.up.railway.app/docs">
+    Interactive documentation with live examples
+  </Card>
+  <Card title="View Examples" icon="code" href="/examples/basic-usage">
+    Complete code examples and use cases
+  </Card>
+  <Card title="Deploy Your Own" icon="rocket" href="/deployment/railway-setup">
+    Set up your own instance with custom configuration
+  </Card>
+  <Card title="Fabric Patterns" icon="wand-magic-sparkles" href="/features/fabric-patterns">
+    Explore 226+ AI analysis patterns
+  </Card>
+</CardGroup>
